@@ -12,14 +12,14 @@ engine = create_engine(DB_URI)
 
 def get_stock_data(symbol):
     """從 Yahoo Finance 抓取股票資料並計算移動平均線"""
-    print(f"🚀 正在處理標的: {symbol}")
+    print(f" 正在處理標的: {symbol}")
     
     # 抓取最近 60 天的歷史資料
     ticker = yf.Ticker(symbol)
     df = ticker.history(period="60d")
     
     if df.empty:
-        print(f"⚠️ 找不到 {symbol} 的資料，跳過。")
+        print(f" 找不到 {symbol} 的資料，跳過。")
         return None
         
     # 重設索引，讓日期變成普通欄位
@@ -56,9 +56,9 @@ def run_etl():
         # 寫入 Supabase 資料庫（如果資料表已存在，就覆蓋更新 if_exists='replace'）
         with engine.connect() as conn:
             final_df.to_sql('taiwan_stocks', conn, if_exists='replace', index=False)
-        print("✅ 所有資料已成功成功寫入 Supabase 雲端資料庫！")
+        print(" 所有資料已成功成功寫入 Supabase 雲端資料庫 ")
     else:
-        print("❌ 沒有任何資料被處理。")
+        print(" 沒有任何資料被處理。")
 
 if __name__ == "__main__":
     run_etl()
